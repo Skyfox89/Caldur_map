@@ -24,13 +24,14 @@ function loadLanguage(lang) {
 var map = L.map('map', {
   crs: L.CRS.Simple,
   minZoom: -5,
-  zoomControl: false  // Erst mal deaktivieren
+  zoomControl: false
 });
 
-// Zoom-Control rechts oben hinzufügen
-L.control.zoom({
-  position: 'topright'  // explizit rechts oben
-}).addTo(map);
+var bounds = [[0,0], [4000,4000]];
+var image = L.imageOverlay('img/mapfinal.png', bounds).addTo(map);
+map.fitBounds(bounds);
+
+L.control.zoom({ position: 'topright' }).addTo(map);
 
 // Beispiel: Karte 4000x4000px
 var bounds = [[0,0], [4000,4000]];
