@@ -1,5 +1,5 @@
-al<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
   <meta charset="utf-8" />
   <title>Caldur - Interactive Map</title>
@@ -8,24 +8,25 @@ al<!DOCTYPE html>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div id="topbar">
-    <input type="text" id="search" data-i18n-placeholder="search_placeholder" placeholder="Suche...">
+  <div id="topbar">
+    <input type="text" id="search" placeholder="Suche...">
     <select id="lang-switcher">
       <option value="de">Deutsch</option>
       <option value="en">English</option>
     </select>
   </div>
-  
-<div id="controls">
-  <label><input type="checkbox" data-layer="stein"> <span data-i18n="label_stein">Stein</span></label>
-  <label><input type="checkbox" data-layer="holz"> <span data-i18n="label_holz">Holz</span></label>
-  <label><input type="checkbox" data-layer="eisen"> <span data-i18n="label_eisen">Eisen</span></label>
-  <label><input type="checkbox" data-layer="silber"> <span data-i18n="label_silber">Silber</span></label>
-  <label><input type="checkbox" data-layer="bosse"> <span data-i18n="label_bosse">Bosse</span></label>
-  <label><input type="checkbox" data-layer="specials"> <span data-i18n="label_specials">Besondere Orte</span></label>
-</div>
+
+  <div id="controls">
+    <label><input type="checkbox" data-layer="stein"> <span>Stein</span></label>
+    <label><input type="checkbox" data-layer="holz"> <span>Holz</span></label>
+    <label><input type="checkbox" data-layer="eisen"> <span>Eisen</span></label>
+    <label><input type="checkbox" data-layer="silber"> <span>Silber</span></label>
+    <label><input type="checkbox" data-layer="bosse"> <span>Bosse</span></label>
+    <label><input type="checkbox" data-layer="specials"> <span>Besondere Orte</span></label>
+  </div>
+
   <div id="map"></div>
-  
+
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>
