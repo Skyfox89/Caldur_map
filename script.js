@@ -37,7 +37,9 @@ document.querySelectorAll('#controls input[type="checkbox"]').forEach(cb => {
   });
 });
 
-document.getElementById("search").addEventListener("input", e => {
+document.getElementById('lang-switcher').addEventListener('change', e => {
+  currentLang = e.target.value;
+  loadLanguage(currentLang);
   const val = e.target.value.toLowerCase();
   for (const group of Object.values(layers)) {
     group.eachLayer(marker => {
