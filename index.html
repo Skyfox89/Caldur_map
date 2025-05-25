@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <title>Caldur - Interactive Map</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Caldur Map Beispiel</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="topbar">
-    <input type="text" id="search" placeholder="Suche...">
-    <select id="lang-switcher">
-      <option value="de">Deutsch</option>
-      <option value="en">English</option>
-    </select>
-  </div>
 
+<!-- Obere Leiste -->
+<div id="topbar">
+  <input type="text" id="search" placeholder="Suche..." />
+  <select id="lang-switcher">
+    <option value="de">Deutsch</option>
+    <option value="en">English</option>
+  </select>
+</div>
+
+<!-- Kontrollboxen -->
   <div id="controls">
     <label><input type="checkbox" data-layer="stein"> <span>Stein</span></label>
     <label><input type="checkbox" data-layer="holz"> <span>Holz</span></label>
