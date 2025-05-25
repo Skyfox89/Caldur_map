@@ -23,15 +23,16 @@ function loadLanguage(lang) {
 // Karte initialisieren
 var map = L.map('map', {
   crs: L.CRS.Simple,
-  minZoom: -5
+  minZoom: -5,
+  zoomControl: true
 });
 
-// Kartengröße anpassen (abhängig von Bildgröße)
-var bounds = [[0, 0], [4000, 4000]];
+// Beispiel: Karte 4000x4000px
+var bounds = [[0,0], [4000,4000]];
 var image = L.imageOverlay('img/mapfinal.png', bounds).addTo(map);
 map.fitBounds(bounds);
 
-// Ressourcen- und Marker-Layer definieren
+// Layer-Gruppen für Marker
 const layers = {
   stein: L.layerGroup().addTo(map),
   holz: L.layerGroup().addTo(map),
@@ -41,19 +42,20 @@ const layers = {
   specials: L.layerGroup().addTo(map)
 };
 
-// Marker aus JSON laden
-fetch('data/markers.json')
-  .then(res => res.json())
-  .then(data => {
-    data.forEach(marker => {
-      const m = L.marker(marker.coords).bindPopup(`<b>${marker.name}</b><br>${marker.info}`);
-      if (layers[marker.type]) {
-        layers[marker.type].addLayer(m);
-      }
-    });
-  });
+// Beispielmarker (Koordinaten anpassen!)
+const exampleMarkers = [
+  { coords: [1000, 1000], name: "Stein 1", type: "stein", info: "Steinressource" },
+  { coords: [1200, 1100], name: "Holz 1", type: "holz", info: "Holzressource" },
+  { coords: [1300, 1400], name: "Boss 1", type: "bosse", info: "Boss Location" }
+];
 
-// Checkbox-Filter für Ressourcenebenen
+// Marker hinzufügen
+exampleMarkers.forEach(marker => {
+  const m = L.marker(marker.coords).bindPopup(`<b>${marker.name}</b><br>${marker.info}`);
+  layers[marker.type].addLayer(m);
+});
+
+// Checkbox-Listener zum Layer ein-/ausschalten
 document.querySelectorAll('#controls input[type="checkbox"]').forEach(cb => {
   cb.addEventListener('change', () => {
     const layer = layers[cb.dataset.layer];
@@ -64,25 +66,3 @@ document.querySelectorAll('#controls input[type="checkbox"]').forEach(cb => {
     }
   });
 });
-
-// Suchfunktion – Marker mit passendem Namen anzeigen
-document.getElementById("search").addEventListener("input", e => {
-  const val = e.target.value.toLowerCase();
-  for (const group of Object.values(layers)) {
-    group.eachLayer(marker => {
-      const name = marker.getPopup().getContent().toLowerCase();
-      if (name.includes(val)) {
-        marker.openPopup();
-      }
-    });
-  }
-});
-
-// Sprachumschalter
-document.getElementById('lang-switcher').addEventListener('change', e => {
-  currentLang = e.target.value;
-  loadLanguage(currentLang);
-});
-
-// Initialsprache laden
-loadLanguage(currentLang);
