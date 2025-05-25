@@ -37,14 +37,14 @@ body {
 }
 
 #controls {
-  position: absolute;
-  top: 90px;  /* Etwas weiter unter die fixe Topbar */
+  position: fixed;
+  top: 70px;   /* unter der festen Topbar */
   left: 10px;
+  z-index: 1100;  /* höher als Karte, aber unter topbar wenn nötig */
   background: rgba(30, 30, 30, 0.85);
   padding: 10px;
   border-radius: 8px;
-  z-index: 1000;
-  max-width: 220px;  /* Optional: max. Breite */
+  max-width: 220px;
 }
 
 #controls label {
