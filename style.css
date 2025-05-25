@@ -38,7 +38,7 @@ body {
 
 #controls {
   position: absolute;
-  top: 70px;  /* Etwas weiter unter die fixe Topbar */
+  top: 90px;  /* Etwas weiter unter die fixe Topbar */
   left: 10px;
   background: rgba(30, 30, 30, 0.85);
   padding: 10px;
