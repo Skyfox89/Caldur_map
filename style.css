@@ -38,12 +38,13 @@ body {
 
 #controls {
   position: absolute;
-  top: 60px; /* unter der topbar */
+  top: 70px;  /* Etwas weiter unter die fixe Topbar */
   left: 10px;
   background: rgba(30, 30, 30, 0.85);
   padding: 10px;
   border-radius: 8px;
   z-index: 1000;
+  max-width: 220px;  /* Optional: max. Breite */
 }
 
 #controls label {
