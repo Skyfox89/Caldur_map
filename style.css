@@ -5,16 +5,16 @@ body {
   font-family: sans-serif;
 }
 
-#map {
-  height: 100vh;
-  width: 100vw;
-}
-
 #topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #2c2c2c;
+  position: fixed;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1100;
 }
 
 #search {
@@ -22,22 +22,23 @@ body {
   max-width: 300px;
   padding: 5px;
   font-size: 16px;
+  border-radius: 4px;
+  border: none;
 }
 
 #lang-switcher {
   margin-left: 10px;
   padding: 5px;
   font-size: 16px;
-}
-
-#controls label {
-  display: block;
-  margin-bottom: 5px;
+  border-radius: 4px;
+  border: none;
+  background-color: #444;
+  color: #ddd;
 }
 
 #controls {
   position: absolute;
-  top: 10px;
+  top: 60px; /* unter der topbar */
   left: 10px;
   background: rgba(30, 30, 30, 0.85);
   padding: 10px;
@@ -45,12 +46,13 @@ body {
   z-index: 1000;
 }
 
-#controls input[type="text"] {
-  width: 200px;
-  padding: 5px;
+#controls label {
+  display: block;
   margin-bottom: 5px;
-  background: #333;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
+}
+
+#map {
+  height: 100vh;
+  width: 100vw;
+  margin-top: 50px; /* Platz für topbar */
 }
