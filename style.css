@@ -5,42 +5,20 @@ body {
   font-family: sans-serif;
   height: 100vh;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Topbar */
+/* Topbar fixiert oben */
 #topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 50px;
   background-color: #2c2c2c;
   display: flex;
   align-items: center;
   padding: 0 10px;
   box-sizing: border-box;
-  z-index: 1100;
-}
-
-/* Hauptbereich: Map + Sidebar */
-#content {
-  flex: 1;
-  display: flex;
-  height: calc(100vh - 50px);
-}
-
-/* Karte */
-#map {
-  flex: 1;
-  position: relative;
-  z-index: 1;
-}
-
-/* Rechte Kontrollbox */
-#controls {
-  width: 220px;
-  background: rgba(30, 30, 30, 0.85);
-  padding: 10px;
-  border-left: 1px solid #444;
-  overflow-y: auto;
   z-index: 1100;
 }
 
@@ -65,22 +43,43 @@ body {
   color: #ddd;
 }
 
+/* Ressourcen-Auswahl unter der Topbar, links fixiert */
+#controls {
+  position: fixed;
+  top: 60px; /* etwas unter der Topbar */
+  left: 10px;
+  background: rgba(30, 30, 30, 0.85);
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 220px;
+  z-index: 1100;
+}
+
 /* Checkboxen */
 #controls label {
   display: block;
   margin-bottom: 6px;
 }
 
-/* Leaflet Zoom-Controls anpassen */
+/* Karte füllt den restlichen Bereich */
+#map {
+  position: fixed;
+  top: 50px; /* unter der Topbar */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+/* Leaflet Zoom-Controls rechts oben */
 .leaflet-control-zoom {
-  top: 60px !important;
-  right: 240px !important;
+  top: 60px !important; /* damit es nicht hinter der Topbar ist */
+  right: 10px !important;
   left: auto !important;
   bottom: auto !important;
   z-index: 1150 !important;
 }
-
-/* Für Barrierefreiheit */
+/* Unsichtbares, aber screenreaderlesbares Label */
 .visually-hidden {
   position: absolute;
   width: 1px;
