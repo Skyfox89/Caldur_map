@@ -1,8 +1,7 @@
 [
   {
     "type": "stein",
-    "nameKey": "marker_stein",
-    "infoKey": "marker_stein_info",
+    "nameKey": "Stein",
     "coords": [
       [1000, 1000],
       [1500, 1200],
@@ -11,8 +10,7 @@
   },
   {
     "type": "holz",
-    "nameKey": "marker_holz",
-    "infoKey": "marker_holz_info",
+    "nameKey": "Holz",
     "coords": [
       [1200, 1100],
       [1600, 1400]
