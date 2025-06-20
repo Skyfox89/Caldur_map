@@ -1,9 +1,19 @@
 {
+  "ressourcen": "Resources",
   "label_stein": "Stone",
   "label_holz": "Wood",
   "label_eisen": "Iron",
   "label_silber": "Silver",
   "label_bosse": "Bosses",
   "label_specials": "Special Locations",
-  "search_placeholder": "Search..."
+  "label_suche": "Search...",
+
+  "marker_stein_1": "Stone",
+  "marker_stein_1_info": "Stone resource",
+
+  "marker_holz_1": "Wood",
+  "marker_holz_1_info": "Wood resource",
+
+  "marker_bosse_1": "Boss",
+  "marker_bosse_1_info": "Boss location"
 }
