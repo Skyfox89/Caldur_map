@@ -2,37 +2,25 @@
   {
     "coords": [1000, 1000],
     "type": "stein",
-    "name": {
-      "de": "Stein",
-      "en": "Stone"
-    },
-    "info": {
-      "de": "Steinressource",
-      "en": "Stone Resource"
-    }
+    "nameKey": "marker_stein_1",
+    "infoKey": "marker_stein_1_info"
+  },
+  {
+    "coords": [1100, 1050],
+    "type": "stein",
+    "nameKey": "marker_stein_2",
+    "infoKey": "marker_stein_2_info"
   },
   {
     "coords": [1200, 1100],
     "type": "holz",
-    "name": {
-      "de": "Holz",
-      "en": "Wood"
-    },
-    "info": {
-      "de": "Holzressource",
-      "en": "Wood Resource"
-    }
+    "nameKey": "marker_holz_1",
+    "infoKey": "marker_holz_1_info"
   },
   {
-    "coords": [1300, 1400],
+    "coords": [2500, 2700],
     "type": "bosse",
-    "name": {
-      "de": "Boss",
-      "en": "Boss"
-    },
-    "info": {
-      "de": "Boss Ort",
-      "en": "Boss Location"
-    }
+    "nameKey": "marker_bosse_1",
+    "infoKey": "marker_bosse_1_info"
   }
 ]
