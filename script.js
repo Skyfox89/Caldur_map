@@ -76,5 +76,6 @@ document.getElementById('lang-switcher').value = currentLang;  // Auswahl passen
 document.getElementById('lang-switcher').addEventListener('change', (e) => {
   const selectedLang = e.target.value;
   localStorage.setItem('lang', selectedLang);
+   currentLang = selectedLang;
   loadLanguage(selectedLang);
 });
