@@ -1,6 +1,6 @@
 // Aktuelle Sprache festlegen
 function loadLanguage(lang) {
-  fetch(data/lang_${lang}.json)
+  fetch(`data/lang_${lang}.json`)
     .then(res => res.json())
     .then(translations => {
       // Textlabels
@@ -35,16 +35,11 @@ var map = L.map('map', {
   zoomControl: false
 });
 
-var bounds = [[0,0], [4000,4000]];
-var image = L.imageOverlay('img/mapfinal.png', bounds).addTo(map);
-map.fitBounds(bounds);
-
-L.control.zoom({ position: 'topright' }).addTo(map);
-
 // Beispiel: Karte 4000x4000px
 var bounds = [[0,0], [4000,4000]];
 var image = L.imageOverlay('img/mapfinal.png', bounds).addTo(map);
 map.fitBounds(bounds);
+L.control.zoom({ position: 'topright' }).addTo(map);
 
 // Layer-Gruppen für Marker
 const layers = {
@@ -80,9 +75,6 @@ if (cb.checked) {
     }
   });
 });
-
-// Sprache beim Laden der Seite setzen
-loadLanguage(currentLang);
 
 // Sprachwechsel über Dropdown ermöglichen
 document.getElementById('lang-switcher').addEventListener('change', (e) => {
