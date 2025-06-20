@@ -53,16 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
 
     types.forEach(type => {
-      // Layer anlegen (falls noch nicht vorhanden)
-      if (!layers[type]) {
-        layers[type] = L.layerGroup().addTo(map);
-      }
+      layers[type] = L.layerGroup().addTo(map);
 
-      // Prüfen ob Checkbox existiert
-      let input = sidebar.querySelector(`input[type="checkbox"][data-layer="${type}"]`);
+      let input = document.querySelector(`#sidebar input[data-layer="${type}"]`);
 
       if (!input) {
-        // Neue Checkbox erstellen
         const label = document.createElement('label');
         input = document.createElement('input');
         input.type = 'checkbox';
@@ -80,17 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.appendChild(label);
       }
 
-      // EventListener nur einmal anhängen
-      if (!input.dataset.bound) {
-        input.addEventListener('change', () => {
-          if (input.checked) {
-            map.addLayer(layers[type]);
-          } else {
-            map.removeLayer(layers[type]);
-          }
-        });
-        input.dataset.bound = 'true';
-      }
+      input.addEventListener('change', () => {
+        if (input.checked) {
+          map.addLayer(layers[type]);
+        } else {
+          map.removeLayer(layers[type]);
+        }
+      });
     });
   }
 
@@ -101,10 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     allMarkers.forEach(markerGroup => {
       const name = translations[markerGroup.nameKey] || markerGroup.nameKey;
-      const info = translations[markerGroup.infoKey] || markerGroup.infoKey;
 
       markerGroup.coords.forEach(coord => {
-        const m = L.marker(coord).bindPopup(`<b>${name}</b><br>${info}`);
+        const m = L.marker(coord).bindPopup(`<b>${name}</b>`);
         layers[markerGroup.type]?.addLayer(m);
       });
     });
