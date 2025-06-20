@@ -18,23 +18,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Icons definieren
   const icons = {
     specials: L.icon({
-      iconUrl: 'img/schloss.png',    // Pfad zu deinem Haus-Icon
-      iconSize: [32, 37],                // Größe anpassen
-      iconAnchor: [16, 37],              // unten mittig
-      popupAnchor: [0, -28]
-    }),
-    bosse: L.icon({
-      iconUrl: 'img/boss.png',    // Pfad zu deinem Totenkopf-Icon
+      iconUrl: 'img/schloss.png',
       iconSize: [32, 37],
       iconAnchor: [16, 37],
       popupAnchor: [0, -28]
     }),
-    default: L.icon({
-      iconUrl: 'img/default-icon.png',  // Standard-Icon
-      iconSize: [41, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [0, -34]
-    })
+    bosse: L.icon({
+      iconUrl: 'img/boss.png',
+      iconSize: [32, 37],
+      iconAnchor: [16, 37],
+      popupAnchor: [0, -28]
+    }),
+    default: new L.Icon.Default() // Leaflet-Standard-Icon
   };
 
   function loadLanguage(lang) {
@@ -75,18 +70,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
 
     types.forEach(type => {
-      // Layer anlegen, falls noch nicht existierend
+      // Layer anlegen
       if (!layers[type]) {
         layers[type] = L.layerGroup().addTo(map);
       }
 
-      // Prüfen, ob Checkbox schon existiert
-      let input = document.querySelector(`#sidebar input[data-layer="${type}"]`);
-
-      if (!input) {
-        // Neue Checkbox erstellen
+      // Checkbox nur erstellen, wenn sie noch nicht existiert
+      if (!document.querySelector(`#sidebar input[data-layer="${type}"]`)) {
         const label = document.createElement('label');
-        input = document.createElement('input');
+        const input = document.createElement('input');
         input.type = 'checkbox';
         input.dataset.layer = type;
         input.checked = true;
@@ -101,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
         label.appendChild(span);
         sidebar.appendChild(label);
 
-        // EventListener für die neue Checkbox
         input.addEventListener('change', () => {
           if (input.checked) {
             map.addLayer(layers[type]);
@@ -119,13 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     allMarkers.forEach(markerGroup => {
-      const name = translations[markerGroup.nameKey] || markerGroup.nameKey;
-
-      // Icon je nach Typ auswählen
+      const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
       const icon = icons[markerGroup.type] || icons.default;
 
       markerGroup.coords.forEach(coord => {
-        const m = L.marker(coord, { icon: icon }).bindPopup(`<b>${name}</b>`);
+        const m = L.marker(coord, { icon }).bindPopup(`<b>${name}</b>`);
         layers[markerGroup.type]?.addLayer(m);
       });
     });
