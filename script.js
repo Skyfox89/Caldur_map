@@ -79,3 +79,4 @@ document.getElementById('lang-switcher').addEventListener('change', (e) => {
    currentLang = selectedLang;
   loadLanguage(selectedLang);
 });
+});
