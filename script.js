@@ -15,6 +15,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentLang = localStorage.getItem('lang') || 'de';
 
+  // Icons definieren
+  const icons = {
+    specials: L.icon({
+      iconUrl: 'img/schloss.png',    // Pfad zu deinem Haus-Icon
+      iconSize: [32, 37],                // Größe anpassen
+      iconAnchor: [16, 37],              // unten mittig
+      popupAnchor: [0, -28]
+    }),
+    bosse: L.icon({
+      iconUrl: 'img/boss.png',    // Pfad zu deinem Totenkopf-Icon
+      iconSize: [32, 37],
+      iconAnchor: [16, 37],
+      popupAnchor: [0, -28]
+    }),
+    default: L.icon({
+      iconUrl: 'img/default-icon.png',  // Standard-Icon
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [0, -34]
+    })
+  };
+
   function loadLanguage(lang) {
     fetch(`data/lang_${lang}.json`)
       .then(res => res.json())
@@ -53,11 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
 
     types.forEach(type => {
-      layers[type] = L.layerGroup().addTo(map);
+      // Layer anlegen, falls noch nicht existierend
+      if (!layers[type]) {
+        layers[type] = L.layerGroup().addTo(map);
+      }
 
+      // Prüfen, ob Checkbox schon existiert
       let input = document.querySelector(`#sidebar input[data-layer="${type}"]`);
 
       if (!input) {
+        // Neue Checkbox erstellen
         const label = document.createElement('label');
         input = document.createElement('input');
         input.type = 'checkbox';
@@ -73,35 +100,40 @@ document.addEventListener('DOMContentLoaded', () => {
         label.appendChild(input);
         label.appendChild(span);
         sidebar.appendChild(label);
-      }
 
-      input.addEventListener('change', () => {
-        if (input.checked) {
-          map.addLayer(layers[type]);
-        } else {
-          map.removeLayer(layers[type]);
-        }
+        // EventListener für die neue Checkbox
+        input.addEventListener('change', () => {
+          if (input.checked) {
+            map.addLayer(layers[type]);
+          } else {
+            map.removeLayer(layers[type]);
+          }
+        });
+      }
+    });
+  }
+
+  function updateMarkers() {
+    for (const layer of Object.values(layers)) {
+      layer.clearLayers();
+    }
+
+    allMarkers.forEach(markerGroup => {
+      const name = translations[markerGroup.nameKey] || markerGroup.nameKey;
+
+      // Icon je nach Typ auswählen
+      const icon = icons[markerGroup.type] || icons.default;
+
+      markerGroup.coords.forEach(coord => {
+        const m = L.marker(coord, { icon: icon }).bindPopup(`<b>${name}</b>`);
+        layers[markerGroup.type]?.addLayer(m);
       });
     });
   }
 
-function updateMarkers() {
-  for (const layer of Object.values(layers)) {
-    layer.clearLayers();
-  }
-
-  allMarkers.forEach(markerGroup => {
-    const name = translations[markerGroup.nameKey] || markerGroup.nameKey;
-
-    markerGroup.coords.forEach(coord => {
-      const m = L.marker(coord).bindPopup(`<b>${name}</b>`);
-      layers[markerGroup.type]?.addLayer(m);
-    });
-  });
-}
-
-  document.getElementById('lang-switcher').value = currentLang;
-  document.getElementById('lang-switcher').addEventListener('change', e => {
+  const langSwitcher = document.getElementById('lang-switcher');
+  langSwitcher.value = currentLang;
+  langSwitcher.addEventListener('change', e => {
     const selectedLang = e.target.value;
     localStorage.setItem('lang', selectedLang);
     currentLang = selectedLang;
