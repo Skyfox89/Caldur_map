@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Marker aktualisieren / neu erstellen mit Übersetzungen
   function updateMarkers() {
+     console.log("Marker werden neu gesetzt mit aktuellen Übersetzungen:", translations);
     for (const layer of Object.values(layers)) {
       layer.clearLayers();
     }
