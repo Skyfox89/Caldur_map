@@ -1,44 +1,42 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Caldur Map Beispiel</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Caldur Map Beispiel</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Obere Leiste -->
+  <div id="topbar">
+    <input
+      type="text"
+      id="search"
+      data-i18n-placeholder="suche"
+      placeholder="Suche..."
+    />
+    <label for="lang-switcher" class="visually-hidden">Sprache auswählen</label>
+    <select id="lang-switcher" name="language">
+      <option value="de">Deutsch</option>
+      <option value="en">English</option>
+    </select>
+  </div>
 
-<!-- Obere Leiste -->
-<div id="topbar">
-  <!-- Suchfeld mit Übersetzung -->
-  <input
-    type="text"
-    id="search"
-    placeholder="Suche..."
-    data-i18n-placeholder="suche"
-  />
+  <!-- Karte und Seitenleiste -->
+  <div id="content">
+    <div id="map"></div>
 
-  <!-- Sprachumschalter mit verstecktem Label -->
-  <label for="lang-switcher" class="visually-hidden">Sprache auswählen</label>
-  <select id="lang-switcher" name="language">
-    <option value="de">Deutsch</option>
-    <option value="en">English</option>
-  </select>
-</div>
-
-<!-- Checkbox-Beschriftungen -->
-<div id="controls">
-  <label><input type="checkbox" data-layer="stein"> <span data-i18n="stein">Stein</span></label>
-  <label><input type="checkbox" data-layer="holz"> <span data-i18n="holz">Holz</span></label>
-  <label><input type="checkbox" data-layer="eisen"> <span data-i18n="eisen">Eisen</span></label>
-  <label><input type="checkbox" data-layer="silber"> <span data-i18n="silber">Silber</span></label>
-  <label><input type="checkbox" data-layer="bosse"> <span data-i18n="bosse">Bosse</span></label>
-  <label><input type="checkbox" data-layer="specials"> <span data-i18n="specials">Besondere Orte</span></label>
-</div>
-
-<!-- Karte -->
-<div id="map"></div>
+    <!-- Kontrollboxen rechts -->
+    <div id="controls">
+      <label><input type="checkbox" data-layer="stein" checked> <span data-i18n="stein">Stein</span></label>
+      <label><input type="checkbox" data-layer="holz" checked> <span data-i18n="holz">Holz</span></label>
+      <label><input type="checkbox" data-layer="eisen" checked> <span data-i18n="eisen">Eisen</span></label>
+      <label><input type="checkbox" data-layer="silber" checked> <span data-i18n="silber">Silber</span></label>
+      <label><input type="checkbox" data-layer="bosse" checked> <span data-i18n="bosse">Bosse</span></label>
+      <label><input type="checkbox" data-layer="specials" checked> <span data-i18n="specials">Besondere Orte</span></label>
+    </div>
+  </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="script.js"></script>
