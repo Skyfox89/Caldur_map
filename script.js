@@ -65,11 +65,10 @@ exampleMarkers.forEach(marker => {
 document.querySelectorAll('#controls input[type="checkbox"]').forEach(cb => {
   cb.addEventListener('change', () => {
     const layer = layers[cb.dataset.layer];
-    if (cb.checked) {
-      map.addLayer(layer);
-    } else {
-      map.removeLayer(layer);
-      loadLanguage(currentLang);
+if (cb.checked) {
+  map.addLayer(layer);
+} else {
+  map.removeLayer(layer);
     }
   });
 });
