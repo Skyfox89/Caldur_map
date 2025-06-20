@@ -1,8 +1,38 @@
 [
   {
-    "name": "Startgebiet",
-    "info": "Holz & Stein verfügbar",
-    "coords": [500, 3800],
-    "type": "holz"
+    "coords": [1000, 1000],
+    "type": "stein",
+    "name": {
+      "de": "Stein",
+      "en": "Stone"
+    },
+    "info": {
+      "de": "Steinressource",
+      "en": "Stone Resource"
+    }
+  },
+  {
+    "coords": [1200, 1100],
+    "type": "holz",
+    "name": {
+      "de": "Holz",
+      "en": "Wood"
+    },
+    "info": {
+      "de": "Holzressource",
+      "en": "Wood Resource"
+    }
+  },
+  {
+    "coords": [1300, 1400],
+    "type": "bosse",
+    "name": {
+      "de": "Boss",
+      "en": "Boss"
+    },
+    "info": {
+      "de": "Boss Ort",
+      "en": "Boss Location"
+    }
   }
 ]
