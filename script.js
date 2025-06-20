@@ -1,24 +1,34 @@
 // Aktuelle Sprache festlegen
 let currentLang = 'de';
 
-// Funktion zum Laden der Sprachdatei
 function loadLanguage(lang) {
   fetch(`data/lang_${lang}.json`)
     .then(res => res.json())
     .then(translations => {
-      // Textlabels (z. B. Checkbox-Beschriftungen)
+      // Textlabels
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[key]) el.textContent = translations[key];
       });
 
-      // Platzhaltertexte (z. B. Suchfeld)
+      // Platzhalter (z. B. Suchfeld)
       document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
         if (translations[key]) el.setAttribute('placeholder', translations[key]);
       });
-    });
+    })
+    .catch(err => console.error("Sprachdatei konnte nicht geladen werden:", err));
 }
+
+// Initialsprache laden
+let currentLang = 'de';
+loadLanguage(currentLang);
+
+// Sprachwechsel
+document.getElementById('lang-switcher').addEventListener('change', (e) => {
+  currentLang = e.target.value;
+  loadLanguage(currentLang);
+});
 
 // Karte initialisieren
 var map = L.map('map', {
