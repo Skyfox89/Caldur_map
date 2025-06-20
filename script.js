@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const exampleMarkers = [
     { coords: [1000, 1000], nameKey: "marker_stein_1", infoKey: "marker_stein_1_info", type: "stein" },
     { coords: [1200, 1100], nameKey: "marker_holz_1", infoKey: "marker_holz_1_info", type: "holz" },
-    { coords: [1300, 1400], nameKey: "marker_bosse_1", infoKey: "marker_bosse_1_info", type: "bosse" }
+    { coords: [1500, 1700], nameKey: "marker_bosse_1", infoKey: "marker_bosse_1_info", type: "bosse" }
   ];
 
   // Marker aktualisieren / neu erstellen mit Übersetzungen
