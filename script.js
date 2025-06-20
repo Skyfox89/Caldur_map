@@ -88,6 +88,7 @@ loadLanguage(currentLang);
 
 // Sprachwechsel über Dropdown ermöglichen
 document.getElementById('lang-switcher').addEventListener('change', (e) => {
-  currentLang = e.target.value;
-  loadLanguage(currentLang);
+  const selectedLang = e.target.value;
+  localStorage.setItem('lang', selectedLang); // optional: merken
+  loadLanguage(selectedLang);
 });
