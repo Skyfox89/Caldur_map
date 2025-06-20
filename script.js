@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', () => {
 // Aktuelle Sprache festlegen und Texte übersetzen
 function loadLanguage(lang) {
   fetch(`data/lang_${lang}.json`)
