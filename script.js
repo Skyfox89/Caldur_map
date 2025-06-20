@@ -15,21 +15,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentLang = localStorage.getItem('lang') || 'de';
 
-  // Icons definieren
+  // Eigene Icons definieren
   const icons = {
     specials: L.icon({
       iconUrl: 'img/schloss.png',
-      iconSize: [32, 37],
+      iconSize: [28, 32],
       iconAnchor: [16, 37],
       popupAnchor: [0, -28]
     }),
     bosse: L.icon({
       iconUrl: 'img/boss.png',
-      iconSize: [32, 37],
+      iconSize: [28, 32],
       iconAnchor: [16, 37],
       popupAnchor: [0, -28]
     }),
-    default: new L.Icon.Default()
+    default: L.icon({
+      iconUrl: 'img/default-icon.png',  // DEIN eigenes Standard-Icon
+      iconSize: [28, 32],
+      iconAnchor: [16, 37],
+      popupAnchor: [0, -28]
+    })
   };
 
   function loadLanguage(lang) {
@@ -67,27 +72,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setupLayersAndCheckboxes() {
     const types = [...new Set(allMarkers.map(m => m.type))];
+    const sidebar = document.getElementById('sidebar');
 
     types.forEach(type => {
       if (!layers[type]) {
-        layers[type] = L.layerGroup();
+        layers[type] = L.layerGroup().addTo(map);
       }
 
-      const checkbox = document.querySelector(`#sidebar input[data-layer="${type}"]`);
-      if (checkbox) {
-        if (checkbox.checked) {
-          map.addLayer(layers[type]);
-        }
+      if (!document.querySelector(`#sidebar input[data-layer="${type}"]`)) {
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.dataset.layer = type;
+        input.checked = true;
+        input.id = `chk-${type}`;
+        input.name = type;
 
-        checkbox.addEventListener('change', () => {
-          if (checkbox.checked) {
+        const span = document.createElement('span');
+        span.setAttribute('data-i18n', `label_${type}`);
+        span.textContent = translations[`label_${type}`] || type;
+
+        label.appendChild(input);
+        label.appendChild(span);
+        sidebar.appendChild(label);
+
+        input.addEventListener('change', () => {
+          if (input.checked) {
             map.addLayer(layers[type]);
           } else {
             map.removeLayer(layers[type]);
           }
         });
-      } else {
-        console.warn(`Checkbox für Typ "${type}" nicht gefunden.`);
       }
     });
   }
@@ -99,7 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     allMarkers.forEach(markerGroup => {
       const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
+
       const icon = icons[markerGroup.type] || icons.default;
+      if (!icons[markerGroup.type]) {
+        console.warn(`⚠ Kein spezielles Icon für Typ "${markerGroup.type}", verwende Default.`);
+      }
 
       markerGroup.coords.forEach(coord => {
         const m = L.marker(coord, { icon }).bindPopup(`<b>${name}</b>`);
