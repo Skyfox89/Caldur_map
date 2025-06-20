@@ -11,21 +11,23 @@
 
 <!-- Obere Leiste -->
 <div id="topbar">
-<label for="lang-switcher" class="visually-hidden">Sprache auswählen</label>
-<select id="lang-switcher" name="language">
-  <option value="de">Deutsch</option>
-  <option value="en">English</option>
-</select>
+  <!-- Suchfeld mit Übersetzung -->
+  <input
+    type="text"
+    id="search"
+    placeholder="Suche..."
+    data-i18n-placeholder="suche"
+  />
 
-<!-- Suchfeld mit übersetzbarem Placeholder -->
-<input
-  type="text"
-  id="search"
-  placeholder="Suche..."
-  data-i18n-placeholder="suche"
-/>
+  <!-- Sprachumschalter mit verstecktem Label -->
+  <label for="lang-switcher" class="visually-hidden">Sprache auswählen</label>
+  <select id="lang-switcher" name="language">
+    <option value="de">Deutsch</option>
+    <option value="en">English</option>
+  </select>
+</div>
 
-<!-- Checkbox-Beschriftungen mit data-i18n -->
+<!-- Checkbox-Beschriftungen -->
 <div id="controls">
   <label><input type="checkbox" data-layer="stein"> <span data-i18n="stein">Stein</span></label>
   <label><input type="checkbox" data-layer="holz"> <span data-i18n="holz">Holz</span></label>
@@ -35,7 +37,8 @@
   <label><input type="checkbox" data-layer="specials"> <span data-i18n="specials">Besondere Orte</span></label>
 </div>
 
-  <div id="map"></div>
+<!-- Karte -->
+<div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="script.js"></script>
