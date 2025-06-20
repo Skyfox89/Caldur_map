@@ -85,20 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function updateMarkers() {
-    for (const layer of Object.values(layers)) {
-      layer.clearLayers();
-    }
-
-    allMarkers.forEach(markerGroup => {
-      const name = translations[markerGroup.nameKey] || markerGroup.nameKey;
-
-      markerGroup.coords.forEach(coord => {
-        const m = L.marker(coord).bindPopup(`<b>${name}</b>`);
-        layers[markerGroup.type]?.addLayer(m);
-      });
-    });
+function updateMarkers() {
+  for (const layer of Object.values(layers)) {
+    layer.clearLayers();
   }
+
+  allMarkers.forEach(markerGroup => {
+    const name = translations[markerGroup.nameKey] || markerGroup.nameKey;
+
+    markerGroup.coords.forEach(coord => {
+      const m = L.marker(coord).bindPopup(`<b>${name}</b>`);
+      layers[markerGroup.type]?.addLayer(m);
+    });
+  });
+}
 
   document.getElementById('lang-switcher').value = currentLang;
   document.getElementById('lang-switcher').addEventListener('change', e => {
