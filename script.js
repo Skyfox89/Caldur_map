@@ -53,11 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
 
     types.forEach(type => {
-      // Layer anlegen
-      layers[type] = L.layerGroup().addTo(map);
+      // Layer anlegen (falls noch nicht vorhanden)
+      if (!layers[type]) {
+        layers[type] = L.layerGroup().addTo(map);
+      }
 
       // Prüfen ob Checkbox existiert
-      let input = document.querySelector(`#sidebar input[data-layer="${type}"]`);
+      let input = sidebar.querySelector(`input[type="checkbox"][data-layer="${type}"]`);
 
       if (!input) {
         // Neue Checkbox erstellen
@@ -78,32 +80,35 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.appendChild(label);
       }
 
-      // EventListener sicherstellen
-      input.addEventListener('change', () => {
-        if (input.checked) {
-          map.addLayer(layers[type]);
-        } else {
-          map.removeLayer(layers[type]);
-        }
+      // EventListener nur einmal anhängen
+      if (!input.dataset.bound) {
+        input.addEventListener('change', () => {
+          if (input.checked) {
+            map.addLayer(layers[type]);
+          } else {
+            map.removeLayer(layers[type]);
+          }
+        });
+        input.dataset.bound = 'true';
+      }
+    });
+  }
+
+  function updateMarkers() {
+    for (const layer of Object.values(layers)) {
+      layer.clearLayers();
+    }
+
+    allMarkers.forEach(markerGroup => {
+      const name = translations[markerGroup.nameKey] || markerGroup.nameKey;
+      const info = translations[markerGroup.infoKey] || markerGroup.infoKey;
+
+      markerGroup.coords.forEach(coord => {
+        const m = L.marker(coord).bindPopup(`<b>${name}</b><br>${info}`);
+        layers[markerGroup.type]?.addLayer(m);
       });
     });
   }
-
-function updateMarkers() {
-  for (const layer of Object.values(layers)) {
-    layer.clearLayers();
-  }
-
-  allMarkers.forEach(markerGroup => {
-    const name = translations[markerGroup.nameKey] || markerGroup.nameKey;
-    const info = translations[markerGroup.infoKey] || markerGroup.infoKey;
-
-    markerGroup.coords.forEach(coord => {
-      const m = L.marker(coord).bindPopup(`<b>${name}</b><br>${info}`);
-      layers[markerGroup.type]?.addLayer(m);
-    });
-  });
-}
 
   document.getElementById('lang-switcher').value = currentLang;
   document.getElementById('lang-switcher').addEventListener('change', e => {
