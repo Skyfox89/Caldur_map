@@ -33,9 +33,11 @@ html, body {
 }
 
 #map {
-  flex: 1;
-  position: relative;
+  flex-grow: 1;
+  min-height: 0; /* wichtig für flexbox-Layout */
+  position: relative; /* falls nötig */
   z-index: 1;
+  height: auto;
 }
 
 #sidebar {
