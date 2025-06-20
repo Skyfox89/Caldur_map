@@ -73,3 +73,12 @@ document.querySelectorAll('#controls input[type="checkbox"]').forEach(cb => {
     }
   });
 });
+
+// Sprache beim Laden der Seite setzen
+loadLanguage(currentLang);
+
+// Sprachwechsel über Dropdown ermöglichen
+document.getElementById('lang-switcher').addEventListener('change', (e) => {
+  currentLang = e.target.value;
+  loadLanguage(currentLang);
+});
