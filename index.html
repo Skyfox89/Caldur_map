@@ -8,14 +8,8 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Obere Leiste -->
   <div id="topbar">
-    <input
-      type="text"
-      id="search"
-      data-i18n-placeholder="suche"
-      placeholder="Suche..."
-    />
+    <input type="text" id="search" placeholder="Suche..." data-i18n-placeholder="suche" />
     <label for="lang-switcher" class="visually-hidden">Sprache auswählen</label>
     <select id="lang-switcher" name="language">
       <option value="de">Deutsch</option>
@@ -23,19 +17,18 @@
     </select>
   </div>
 
-  <!-- Karte und Seitenleiste -->
-  <div id="content">
+  <div id="main">
     <div id="map"></div>
 
-    <!-- Kontrollboxen rechts -->
-    <div id="controls">
+    <aside id="sidebar">
+      <h2 data-i18n="ressourcen">Ressourcen</h2>
       <label><input type="checkbox" data-layer="stein" checked> <span data-i18n="stein">Stein</span></label>
       <label><input type="checkbox" data-layer="holz" checked> <span data-i18n="holz">Holz</span></label>
       <label><input type="checkbox" data-layer="eisen" checked> <span data-i18n="eisen">Eisen</span></label>
       <label><input type="checkbox" data-layer="silber" checked> <span data-i18n="silber">Silber</span></label>
       <label><input type="checkbox" data-layer="bosse" checked> <span data-i18n="bosse">Bosse</span></label>
       <label><input type="checkbox" data-layer="specials" checked> <span data-i18n="specials">Besondere Orte</span></label>
-    </div>
+    </aside>
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
