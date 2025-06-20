@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
       popupAnchor: [0, -28]
     }),
     default: L.icon({
-      iconUrl: 'img/default-icon.png',  // DEIN eigenes Standard-Icon
+      iconUrl: 'img/pin.png',  // DEIN eigenes Standard-Icon
       iconSize: [28, 32],
       iconAnchor: [16, 37],
       popupAnchor: [0, -28]
