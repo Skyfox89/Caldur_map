@@ -69,6 +69,7 @@ document.querySelectorAll('#controls input[type="checkbox"]').forEach(cb => {
       map.addLayer(layer);
     } else {
       map.removeLayer(layer);
+      loadLanguage(currentLang);
     }
   });
 });
