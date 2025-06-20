@@ -7,3 +7,12 @@
   "label_specials": "Special Locations",
   "search_placeholder": "Search..."
 }
+{
+  "suche": "Search...",
+  "stein": "Stone",
+  "holz": "Wood",
+  "eisen": "Iron",
+  "silber": "Silver",
+  "bosse": "Bosses",
+  "specials": "Special Places"
+}
