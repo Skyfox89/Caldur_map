@@ -60,7 +60,7 @@ exampleMarkers.forEach(marker => {
 });
 
 // Checkbox-Listener zum Layer ein-/ausschalten
-document.querySelectorAll('#controls input[type="checkbox"]').forEach(cb => {
+document.querySelectorAll('#sidebar input[type="checkbox"]').forEach(cb => {
   cb.addEventListener('change', () => {
     const layer = layers[cb.dataset.layer];
     if (cb.checked) {
