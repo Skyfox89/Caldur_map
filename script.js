@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       iconAnchor: [16, 37],
       popupAnchor: [0, -28]
     }),
-    default: new L.Icon.Default() // Leaflet-Standard-Icon
+    default: new L.Icon.Default()
   };
 
   function loadLanguage(lang) {
@@ -67,39 +67,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setupLayersAndCheckboxes() {
     const types = [...new Set(allMarkers.map(m => m.type))];
-    const sidebar = document.getElementById('sidebar');
 
     types.forEach(type => {
-      // Layer anlegen
       if (!layers[type]) {
-        layers[type] = L.layerGroup().addTo(map);
+        layers[type] = L.layerGroup();
       }
 
-      // Checkbox nur erstellen, wenn sie noch nicht existiert
-      if (!document.querySelector(`#sidebar input[data-layer="${type}"]`)) {
-        const label = document.createElement('label');
-        const input = document.createElement('input');
-        input.type = 'checkbox';
-        input.dataset.layer = type;
-        input.checked = true;
-        input.id = `chk-${type}`;
-        input.name = type;
+      const checkbox = document.querySelector(`#sidebar input[data-layer="${type}"]`);
+      if (checkbox) {
+        if (checkbox.checked) {
+          map.addLayer(layers[type]);
+        }
 
-        const span = document.createElement('span');
-        span.setAttribute('data-i18n', `label_${type}`);
-        span.textContent = translations[`label_${type}`] || type;
-
-        label.appendChild(input);
-        label.appendChild(span);
-        sidebar.appendChild(label);
-
-        input.addEventListener('change', () => {
-          if (input.checked) {
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
             map.addLayer(layers[type]);
           } else {
             map.removeLayer(layers[type]);
           }
         });
+      } else {
+        console.warn(`Checkbox für Typ "${type}" nicht gefunden.`);
       }
     });
   }
