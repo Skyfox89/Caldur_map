@@ -1,82 +1,98 @@
 document.addEventListener('DOMContentLoaded', () => {
-// Aktuelle Sprache festlegen und Texte übersetzen
-function loadLanguage(lang) {
-  fetch(`data/lang_${lang}.json`)
-    .then(res => res.json())
-    .then(translations => {
-      // Textlabels (z.B. Checkbox-Beschriftungen)
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[key]) el.textContent = translations[key];
-      });
+  let translations = {}; // aktuelles Übersetzungsobjekt
 
-      // Platzhalter (z.B. Suchfeld)
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[key]) el.setAttribute('placeholder', translations[key]);
-      });
-    })
-    .catch(err => console.error("Sprachdatei konnte nicht geladen werden:", err));
-}
+  // Funktion zum Laden der Sprache und Übersetzung der UI
+  function loadLanguage(lang) {
+    fetch(`data/lang_${lang}.json`)
+      .then(res => res.json())
+      .then(translationsData => {
+        translations = translationsData;
 
-// Initialsprache aus localStorage oder Standard 'de'
-let currentLang = localStorage.getItem('lang') || 'de';
-loadLanguage(currentLang);
+        // UI-Texte übersetzen
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (translations[key]) el.textContent = translations[key];
+        });
 
-// Karte initialisieren — nur einmal!
-var map = L.map('map', {
-  crs: L.CRS.Simple,
-  minZoom: -5,
-  zoomControl: false
-});
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+          const key = el.getAttribute('data-i18n-placeholder');
+          if (translations[key]) el.setAttribute('placeholder', translations[key]);
+        });
 
-var bounds = [[0, 0], [4000, 4000]];
-var image = L.imageOverlay('img/mapfinal.png', bounds).addTo(map);
-map.fitBounds(bounds);
+        updateMarkers(); // Marker-Popups mit neuen Texten aktualisieren
+      })
+      .catch(err => console.error("Sprachdatei konnte nicht geladen werden:", err));
+  }
 
-L.control.zoom({ position: 'topright' }).addTo(map);
+  // Initialsprache aus localStorage oder Standard 'de'
+  let currentLang = localStorage.getItem('lang') || 'de';
 
-// Layer-Gruppen für Marker
-const layers = {
-  stein: L.layerGroup().addTo(map),
-  holz: L.layerGroup().addTo(map),
-  eisen: L.layerGroup().addTo(map),
-  silber: L.layerGroup().addTo(map),
-  bosse: L.layerGroup().addTo(map),
-  specials: L.layerGroup().addTo(map)
-};
-
-// Beispielmarker (Koordinaten anpassen)
-const exampleMarkers = [
-  { coords: [1000, 1000], name: "Stein 1", type: "stein", info: "Steinressource" },
-  { coords: [1200, 1100], name: "Holz 1", type: "holz", info: "Holzressource" },
-  { coords: [1300, 1400], name: "Boss 1", type: "bosse", info: "Boss Location" }
-];
-
-// Marker hinzufügen
-exampleMarkers.forEach(marker => {
-  const m = L.marker(marker.coords).bindPopup(`<b>${marker.name}</b><br>${marker.info}`);
-  layers[marker.type].addLayer(m);
-});
-
-// Checkbox-Listener zum Layer ein-/ausschalten
-document.querySelectorAll('#sidebar input[type="checkbox"]').forEach(cb => {
-  cb.addEventListener('change', () => {
-    const layer = layers[cb.dataset.layer];
-    if (cb.checked) {
-      map.addLayer(layer);
-    } else {
-      map.removeLayer(layer);
-    }
+  // Karte initialisieren
+  var map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: -5,
+    zoomControl: false
   });
-});
 
-// Sprachwechsel über Dropdown mit Speicherung und Aktualisierung der Texte
-document.getElementById('lang-switcher').value = currentLang;  // Auswahl passend setzen
-document.getElementById('lang-switcher').addEventListener('change', (e) => {
-  const selectedLang = e.target.value;
-  localStorage.setItem('lang', selectedLang);
-   currentLang = selectedLang;
-  loadLanguage(selectedLang);
-});
+  var bounds = [[0, 0], [4000, 4000]];
+  L.imageOverlay('img/mapfinal.png', bounds).addTo(map);
+  map.fitBounds(bounds);
+
+  L.control.zoom({ position: 'topright' }).addTo(map);
+
+  // Layer-Gruppen für Marker
+  const layers = {
+    stein: L.layerGroup().addTo(map),
+    holz: L.layerGroup().addTo(map),
+    eisen: L.layerGroup().addTo(map),
+    silber: L.layerGroup().addTo(map),
+    bosse: L.layerGroup().addTo(map),
+    specials: L.layerGroup().addTo(map)
+  };
+
+  // Marker-Daten mit Übersetzungs-Schlüsseln
+  const exampleMarkers = [
+    { coords: [1000, 1000], nameKey: "marker_stein_1", infoKey: "marker_stein_1_info", type: "stein" },
+    { coords: [1200, 1100], nameKey: "marker_holz_1", infoKey: "marker_holz_1_info", type: "holz" },
+    { coords: [1300, 1400], nameKey: "marker_bosse_1", infoKey: "marker_bosse_1_info", type: "bosse" }
+  ];
+
+  // Marker aktualisieren / neu erstellen mit Übersetzungen
+  function updateMarkers() {
+    for (const layer of Object.values(layers)) {
+      layer.clearLayers();
+    }
+
+    exampleMarkers.forEach(marker => {
+      const name = translations[marker.nameKey] || marker.nameKey;
+      const info = translations[marker.infoKey] || marker.infoKey;
+      const m = L.marker(marker.coords).bindPopup(`<b>${name}</b><br>${info}`);
+      layers[marker.type].addLayer(m);
+    });
+  }
+
+  // Checkboxen ein-/ausschalten für Layer
+  document.querySelectorAll('#sidebar input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const layer = layers[cb.dataset.layer];
+      if (cb.checked) {
+        map.addLayer(layer);
+      } else {
+        map.removeLayer(layer);
+      }
+    });
+  });
+
+  // Sprachwechsel Dropdown
+  const langSwitcher = document.getElementById('lang-switcher');
+  langSwitcher.value = currentLang;
+  langSwitcher.addEventListener('change', e => {
+    const selectedLang = e.target.value;
+    localStorage.setItem('lang', selectedLang);
+    currentLang = selectedLang;
+    loadLanguage(selectedLang);
+  });
+
+  // Erstmalige Sprach-Ladung
+  loadLanguage(currentLang);
 });
