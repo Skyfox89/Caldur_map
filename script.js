@@ -1,3 +1,6 @@
+/* jshint esversion: 6 */
+/* global L */
+
 document.addEventListener('DOMContentLoaded', () => {
   let translations = {};
   let allMarkers = [];
