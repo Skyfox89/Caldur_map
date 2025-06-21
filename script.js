@@ -70,66 +70,71 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(err => console.error("Marker-Datei konnte nicht geladen werden:", err));
   }
 
-  function setupLayersAndCheckboxes() {
-    const types = [...new Set(allMarkers.map(m => m.type))];
-    const sidebar = document.getElementById('sidebar');
+function setupLayersAndCheckboxes() {
+  const types = [...new Set(allMarkers.map(m => m.type))];
+  const sidebar = document.getElementById('sidebar');
 
-    types.forEach(type => {
-      if (!layers[type]) {
-        layers[type] = L.layerGroup().addTo(map);
-      }
-
-      if (!document.querySelector(`#sidebar input[data-layer="${type}"]`)) {
-        const label = document.createElement('label');
-        const input = document.createElement('input');
-        input.type = 'checkbox';
-        input.dataset.layer = type;
-        input.checked = true;
-        input.id = `chk-${type}`;
-        input.name = type;
-
-        const span = document.createElement('span');
-        span.setAttribute('data-i18n', `label_${type}`);
-        span.textContent = translations[`label_${type}`] || type;
-
-        label.appendChild(input);
-        label.appendChild(span);
-        sidebar.appendChild(label);
-
-        // Eventlistener für Checkbox: Update der Marker
-input.addEventListener('change', () => {
-  updateMarkers();
-        });
-      }
-    });
-  }
-
-  function updateMarkers() {
-    // Alle Layer leeren
-    for (const layer of Object.values(layers)) {
-      layer.clearLayers();
+  types.forEach(type => {
+    if (!layers[type]) {
+      layers[type] = L.layerGroup().addTo(map);
     }
 
-    allMarkers.forEach(markerGroup => {
-      const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
-      const icon = icons[markerGroup.type] || icons.default;
+    if (!document.querySelector(`#sidebar input[data-layer="${type}"]`)) {
+      const label = document.createElement('label');
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.dataset.layer = type;
+      input.checked = true;
+      input.id = `chk-${type}`;
+      input.name = type;
 
-      if (!icons[markerGroup.type]) {
-        console.warn(`⚠ Kein spezielles Icon für Typ "${markerGroup.type}", verwende Default.`);
-      }
+      const span = document.createElement('span');
+      span.setAttribute('data-i18n', `label_${type}`);
+      span.textContent = translations[`label_${type}`] || type;
 
-      // Checkbox-Status prüfen, ob Layer sichtbar sein soll
-      const checkbox = document.querySelector(`#sidebar input[data-layer="${markerGroup.type}"]`);
-      if (!checkbox || !checkbox.checked) {
-        return; // Nicht sichtbar, Marker nicht hinzufügen
-      }
+      label.appendChild(input);
+      label.appendChild(span);
+      sidebar.appendChild(label);
 
-      markerGroup.coords.forEach(coord => {
-        const m = L.marker(coord, { icon }).bindPopup(`<b>${name}</b>`);
-        layers[markerGroup.type]?.addLayer(m);
+      // Eventlistener für Checkbox-Statuswechsel
+      input.addEventListener('change', () => {
+        if (input.checked) {
+          map.addLayer(layers[type]);
+        } else {
+          map.removeLayer(layers[type]);
+        }
+        updateMarkers(); // Marker sofort aktualisieren
       });
-    });
+    }
+  });
+}
+
+function updateMarkers() {
+  // Alle Layer leeren
+  for (const layer of Object.values(layers)) {
+    layer.clearLayers();
   }
+
+  allMarkers.forEach(markerGroup => {
+    const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
+    const icon = icons[markerGroup.type] || icons.default;
+
+    if (!icons[markerGroup.type]) {
+      console.warn(`⚠ Kein spezielles Icon für Typ "${markerGroup.type}", verwende Default.`);
+    }
+
+    // Prüfen, ob Checkbox für diesen Typ aktiv ist
+    const checkbox = document.querySelector(`#sidebar input[data-layer="${markerGroup.type}"]`);
+    if (!checkbox || !checkbox.checked) {
+      return; // Checkbox nicht angehakt = Marker nicht anzeigen
+    }
+
+    markerGroup.coords.forEach(coord => {
+      const m = L.marker(coord, { icon }).bindPopup(`<b>${name}</b>`);
+      layers[markerGroup.type]?.addLayer(m);
+    });
+  });
+}
 
   const langSwitcher = document.getElementById('lang-switcher');
   langSwitcher.value = currentLang;
