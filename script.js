@@ -66,7 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
         allMarkers = data;
         setupLayersAndCheckboxes();
         updateMarkers();
-      })
+
+  // Initial: Marker anzeigen oder verstecken je nach Checkbox
+  Object.entries(layers).forEach(([type, layer]) => {
+    const checkbox = document.querySelector(`#sidebar input[data-layer="${type}"]`);
+    if (checkbox && !checkbox.checked) {
+      map.removeLayer(layer);  // Layer ausblenden wenn nicht angehakt
+    }
+  });
+})
       .catch(err => console.error("Marker-Datei konnte nicht geladen werden:", err));
   }
 
