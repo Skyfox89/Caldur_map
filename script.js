@@ -66,15 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         allMarkers = data;
         setupLayersAndCheckboxes();
         updateMarkers();
-
-  // Initial: Marker anzeigen oder verstecken je nach Checkbox
-  Object.entries(layers).forEach(([type, layer]) => {
-    const checkbox = document.querySelector(`#sidebar input[data-layer="${type}"]`);
-    if (checkbox && !checkbox.checked) {
-      map.removeLayer(layer);  // Layer ausblenden wenn nicht angehakt
-    }
-  });
-})
+      })
       .catch(err => console.error("Marker-Datei konnte nicht geladen werden:", err));
   }
 
@@ -104,28 +96,32 @@ document.addEventListener('DOMContentLoaded', () => {
         label.appendChild(span);
         sidebar.appendChild(label);
 
+        // Eventlistener für Checkbox: Update der Marker
         input.addEventListener('change', () => {
-          if (input.checked) {
-            map.addLayer(layers[type]);
-          } else {
-            map.removeLayer(layers[type]);
-          }
+          updateMarkers();
         });
       }
     });
   }
 
   function updateMarkers() {
+    // Alle Layer leeren
     for (const layer of Object.values(layers)) {
       layer.clearLayers();
     }
 
     allMarkers.forEach(markerGroup => {
       const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
-
       const icon = icons[markerGroup.type] || icons.default;
+
       if (!icons[markerGroup.type]) {
         console.warn(`⚠ Kein spezielles Icon für Typ "${markerGroup.type}", verwende Default.`);
+      }
+
+      // Checkbox-Status prüfen, ob Layer sichtbar sein soll
+      const checkbox = document.querySelector(`#sidebar input[data-layer="${markerGroup.type}"]`);
+      if (!checkbox || !checkbox.checked) {
+        return; // Nicht sichtbar, Marker nicht hinzufügen
       }
 
       markerGroup.coords.forEach(coord => {
