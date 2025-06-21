@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.appendChild(label);
 
         // Eventlistener für Checkbox: Update der Marker
-        input.addEventListener('change', () => {
-          updateMarkers();
+input.addEventListener('change', () => {
+  updateMarkers();
         });
       }
     });
