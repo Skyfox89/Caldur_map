@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let translations = {};
   let allMarkers = [];
   const layers = {};
+  
   const map = L.map('map', {
     crs: L.CRS.Simple,
     minZoom: -5,
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentLang = localStorage.getItem('lang') || 'de';
 
-  // Eigene Icons definieren
+  // Icons definieren
   const icons = {
     specials: L.icon({
       iconUrl: 'img/schloss.png',
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
       popupAnchor: [0, -28]
     }),
     default: L.icon({
-      iconUrl: 'img/pin.png',  // eigenes Standard-Icon
+      iconUrl: 'img/pin.png',
       iconSize: [28, 32],
       iconAnchor: [16, 37],
       popupAnchor: [0, -28]
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(data => {
         translations = data;
+        console.log('Sprache geladen:', lang);
         updateUI();
         updateMarkers();
       })
@@ -67,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(data => {
         allMarkers = data;
+        console.log('Marker geladen:', allMarkers.length);
         setupLayersAndCheckboxes();
         updateMarkers();
       })
@@ -80,8 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
     types.forEach(type => {
       if (!layers[type]) {
         layers[type] = L.layerGroup();
+        console.log('Layer erstellt für:', type);
       }
 
+      // Checkbox nur anlegen, wenn noch nicht vorhanden
       if (!document.querySelector(`#sidebar input[data-layer="${type}"]`)) {
         const label = document.createElement('label');
         const input = document.createElement('input');
@@ -99,8 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
         label.appendChild(span);
         sidebar.appendChild(label);
 
-        // Nur updateMarkers aufrufen — Layer ein/aus wird dort gesteuert
         input.addEventListener('change', () => {
+          console.log(`Checkbox ${type} geändert: ${input.checked}`);
           updateMarkers();
         });
       }
@@ -108,31 +113,38 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateMarkers() {
-    // Alle Layer leeren und von Karte entfernen
-    for (const layer of Object.values(layers)) {
+    console.log('updateMarkers gestartet');
+
+    // Alle Layer löschen und von der Karte entfernen
+    Object.values(layers).forEach(layer => {
       layer.clearLayers();
-      map.removeLayer(layer);
-    }
+      if (map.hasLayer(layer)) {
+        map.removeLayer(layer);
+        console.log('Layer entfernt von Karte:', layer);
+      }
+    });
 
     allMarkers.forEach(markerGroup => {
-      const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
-      const icon = icons[markerGroup.type] || icons.default;
-
-      if (!icons[markerGroup.type]) {
-        console.warn(`⚠ Kein spezielles Icon für Typ "${markerGroup.type}", verwende Default.`);
-      }
-
       const checkbox = document.querySelector(`#sidebar input[data-layer="${markerGroup.type}"]`);
       if (checkbox && checkbox.checked) {
+        const icon = icons[markerGroup.type] || icons.default;
+        const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
+
         markerGroup.coords.forEach(coord => {
           const marker = L.marker(coord, { icon }).bindPopup(`<b>${name}</b>`);
           layers[markerGroup.type].addLayer(marker);
         });
         map.addLayer(layers[markerGroup.type]);
+        console.log('Layer hinzugefügt:', markerGroup.type);
+      } else {
+        console.log(`Layer ausgeblendet (Checkbox nicht gesetzt): ${markerGroup.type}`);
       }
     });
+
+    console.log('updateMarkers beendet');
   }
 
+  // Sprache Switcher
   const langSwitcher = document.getElementById('lang-switcher');
   langSwitcher.value = currentLang;
   langSwitcher.addEventListener('change', e => {
