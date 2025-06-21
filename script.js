@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
       popupAnchor: [0, -28]
     }),
     default: L.icon({
-      iconUrl: 'img/pin.png',  // DEIN eigenes Standard-Icon
+      iconUrl: 'img/pin.png',  // eigenes Standard-Icon
       iconSize: [28, 32],
       iconAnchor: [16, 37],
       popupAnchor: [0, -28]
@@ -70,71 +70,65 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(err => console.error("Marker-Datei konnte nicht geladen werden:", err));
   }
 
-function setupLayersAndCheckboxes() {
-  const types = [...new Set(allMarkers.map(m => m.type))];
-  const sidebar = document.getElementById('sidebar');
+  function setupLayersAndCheckboxes() {
+    const types = [...new Set(allMarkers.map(m => m.type))];
+    const sidebar = document.getElementById('sidebar');
 
-  types.forEach(type => {
-    if (!layers[type]) {
-      layers[type] = L.layerGroup().addTo(map);
-    }
+    types.forEach(type => {
+      if (!layers[type]) {
+        layers[type] = L.layerGroup();
+      }
 
-    if (!document.querySelector(`#sidebar input[data-layer="${type}"]`)) {
-      const label = document.createElement('label');
-      const input = document.createElement('input');
-      input.type = 'checkbox';
-      input.dataset.layer = type;
-      input.checked = true;
-      input.id = `chk-${type}`;
-      input.name = type;
+      if (!document.querySelector(`#sidebar input[data-layer="${type}"]`)) {
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.dataset.layer = type;
+        input.checked = true;
+        input.id = `chk-${type}`;
+        input.name = type;
 
-      const span = document.createElement('span');
-      span.setAttribute('data-i18n', `label_${type}`);
-      span.textContent = translations[`label_${type}`] || type;
+        const span = document.createElement('span');
+        span.setAttribute('data-i18n', `label_${type}`);
+        span.textContent = translations[`label_${type}`] || type;
 
-      label.appendChild(input);
-      label.appendChild(span);
-      sidebar.appendChild(label);
+        label.appendChild(input);
+        label.appendChild(span);
+        sidebar.appendChild(label);
 
-      // Eventlistener für Checkbox-Statuswechsel
-      input.addEventListener('change', () => {
-        if (input.checked) {
-          map.addLayer(layers[type]);
-        } else {
-          map.removeLayer(layers[type]);
-        }
-        updateMarkers(); // Marker sofort aktualisieren
-      });
-    }
-  });
-}
-
-function updateMarkers() {
-  // Alle Layer leeren
-  for (const layer of Object.values(layers)) {
-    layer.clearLayers();
+        // Nur updateMarkers aufrufen — Layer ein/aus wird dort gesteuert
+        input.addEventListener('change', () => {
+          updateMarkers();
+        });
+      }
+    });
   }
 
-  allMarkers.forEach(markerGroup => {
-    const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
-    const icon = icons[markerGroup.type] || icons.default;
-
-    if (!icons[markerGroup.type]) {
-      console.warn(`⚠ Kein spezielles Icon für Typ "${markerGroup.type}", verwende Default.`);
+  function updateMarkers() {
+    // Alle Layer leeren und von Karte entfernen
+    for (const layer of Object.values(layers)) {
+      layer.clearLayers();
+      map.removeLayer(layer);
     }
 
-    // Prüfen, ob Checkbox für diesen Typ aktiv ist
-    const checkbox = document.querySelector(`#sidebar input[data-layer="${markerGroup.type}"]`);
-    if (!checkbox || !checkbox.checked) {
-      return; // Checkbox nicht angehakt = Marker nicht anzeigen
-    }
+    allMarkers.forEach(markerGroup => {
+      const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
+      const icon = icons[markerGroup.type] || icons.default;
 
-    markerGroup.coords.forEach(coord => {
-      const m = L.marker(coord, { icon }).bindPopup(`<b>${name}</b>`);
-      layers[markerGroup.type]?.addLayer(m);
+      if (!icons[markerGroup.type]) {
+        console.warn(`⚠ Kein spezielles Icon für Typ "${markerGroup.type}", verwende Default.`);
+      }
+
+      const checkbox = document.querySelector(`#sidebar input[data-layer="${markerGroup.type}"]`);
+      if (checkbox && checkbox.checked) {
+        markerGroup.coords.forEach(coord => {
+          const marker = L.marker(coord, { icon }).bindPopup(`<b>${name}</b>`);
+          layers[markerGroup.type].addLayer(marker);
+        });
+        map.addLayer(layers[markerGroup.type]);
+      }
     });
-  });
-}
+  }
 
   const langSwitcher = document.getElementById('lang-switcher');
   langSwitcher.value = currentLang;
