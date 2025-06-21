@@ -89,27 +89,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function updateMarkers() {
-    Object.values(layers).forEach(layer => {
-      layer.clearLayers();
-      if (map.hasLayer(layer)) {
-        map.removeLayer(layer);
-      }
-    });
+function updateMarkers() {
+  // Alle Layer vom Map entfernen
+  Object.values(layers).forEach(layer => {
+    if (map.hasLayer(layer)) {
+      map.removeLayer(layer);
+    }
+    layer.clearLayers(); // Marker aus Layer entfernen
+  });
 
-    allMarkers.forEach(markerGroup => {
-      const checkbox = document.querySelector(`#chk-${markerGroup.type}`);
-      if (checkbox && checkbox.checked) {
-        const icon = icons[markerGroup.type] || icons.default;
-        const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
-        markerGroup.coords.forEach(coord => {
-          const marker = L.marker(coord, { icon }).bindPopup(`<b>${name}</b>`);
-          layers[markerGroup.type].addLayer(marker);
-        });
-        map.addLayer(layers[markerGroup.type]);
-      }
-    });
-  }
+  // Neue Marker hinzufügen und Layer wieder auf Map legen
+  allMarkers.forEach(markerGroup => {
+    const checkbox = document.querySelector(`#chk-${markerGroup.type}`);
+    if (checkbox && checkbox.checked) {
+      const icon = icons[markerGroup.type] || icons.default;
+      const name = translations[`label_${markerGroup.type}`] || markerGroup.type;
+
+      markerGroup.coords.forEach(coord => {
+        const marker = L.marker(coord, { icon }).bindPopup(`<b>${name}</b>`);
+        layers[markerGroup.type].addLayer(marker);
+      });
+
+      // Layer auf Map hinzufügen (erst nachdem Marker rein sind)
+      map.addLayer(layers[markerGroup.type]);
+    }
+  });
+}
 
   const langSwitcher = document.getElementById('lang-switcher');
   langSwitcher.value = currentLang;
